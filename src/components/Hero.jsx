@@ -1,10 +1,28 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {motion} from 'framer-motion'
 import {styles} from '../styles'
 import { ComputersCanvas } from './canvas'
 import myimage from '../assets/img.jpg'
 
 const Hero = () => {
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    setIsDesktop(mediaQuery.matches);
+
+    const handleMediaQueryChange = (event) => {
+      setIsDesktop(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);
+
   return (
     <section className='relative w-full h-screen mx-auto'>
       <div className={`${styles.paddingX} absolute inset-0 top-[120px] max-w-7xl mx-auto flex flex-row items-start gap-5`}>
@@ -27,23 +45,7 @@ const Hero = () => {
         </div>
 
       </div>
-      <ComputersCanvas />
-
-{/*       <div className='mx-auto absolute xs:bottom-10 bottom-25 w-full flex justify-center items-center'>
-        <a href="#about">
-          <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
-            <motion.div 
-              animate={{y:[0, 24, 0]}}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: 'loop'
-              }}
-              className='w-3 h-3 rounded-full bg-secondary mb-1'
-            />
-          </div>
-        </a>
-      </div> */}
+      {isDesktop && <ComputersCanvas />}
 
     </section>
   )
